@@ -1,0 +1,43 @@
+name: Build Kernel on GitHub Actions
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Update Environment
+      run: sudo apt update -y
+
+    - name: Install Dependencies
+      run: sudo apt install -y git build-essential zip curl
+
+    - name: Build kernel
+      run: bash begin.sh
+
+    - name: Upload kernel
+      uses: actions/upload-artifact@v4
+      with:
+        name: valeryn
+        path: 4.19*.zip
+
+    - name: Publish to GitHub Releases
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        # Creates a unique tag version like v42 using the unique Actions run ID
+        TAG_VERSION="v${{ github.run_number }}"
+        
+        echo "Creating release $TAG_VERSION and uploading binaries..."
+        gh release create "$TAG_VERSION" 4.19*.zip \
+          --title "Kernel Release $TAG_VERSION" \
+          --notes "Automated upload via manual build trigger."
