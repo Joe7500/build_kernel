@@ -64,10 +64,14 @@ cd KernelSU-Next/
 #git pull --rebase
 git reset --hard
 git switch next-susfs
+git pull --unshallow
 git tag next-susfs-1.5.12
 cd ..
-bash KernelSU-Next/kernel/setup.sh next-susfs-1.5.12
+bash KernelSU-Next/kernel/setup.sh next-susfs
 cd KernelSU-Next/
+cd kernel
+sed -i 's#origin/HEAD#HEAD#g' Makefile
+cd ..
 patch -p1  < ../../../susfs-1.1.1/pkg_observer.patch || exit 1
 cd ..
 
