@@ -78,12 +78,6 @@ cd ..
 cd arch/arm64/configs/vendor/
 ln -s bengal-perf_defconfig chime_defconfig
 cd -
-cp arch/arm64/configs/vendor/bengal-perf_defconfig arch/arm64/configs/vendor/chime-stock_defconfig
-grep -v _KSU arch/arm64/configs/vendor/chime-stock_defconfig > arch/arm64/configs/vendor/chime-stock_defconfig.1
-mv arch/arm64/configs/vendor/chime-stock_defconfig.1 arch/arm64/configs/vendor/chime-stock_defconfig
-echo 'CONFIG_KSU=y' >> arch/arm64/configs/vendor/chime_defconfig
-echo 'CONFIG_KSU_SUSFS=y' >> arch/arm64/configs/vendor/chime_defconfig
-echo 'CONFIG_KSU_SUSFS_HAS_MAGIC_MOUNT=y' >> arch/arm64/configs/vendor/chime_defconfig
 
 bash ../../do_toolchain.sh
 cp ../../hani-ci.sh .
@@ -144,10 +138,6 @@ git switch legacy-susfs
 git tag 3.2.0-legacy-susfs
 cd ..
 bash KernelSU-Next/kernel/setup.sh 3.2.0-legacy-susfs
-
-cp arch/arm64/configs/vendor/bengal-perf_defconfig arch/arm64/configs/vendor/chime-stock_defconfig
-grep -v _KSU arch/arm64/configs/vendor/chime-stock_defconfig > arch/arm64/configs/vendor/chime-stock_defconfig.1
-mv arch/arm64/configs/vendor/chime-stock_defconfig.1 arch/arm64/configs/vendor/chime-stock_defconfig
 
 echo "CONFIG_KSU=y" >> arch/arm64/configs/vendor/bengal-perf_defconfig
 echo "# CONFIG_KPROBES is not set" >> arch/arm64/configs/vendor/bengal-perf_defconfig
